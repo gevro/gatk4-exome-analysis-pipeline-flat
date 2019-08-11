@@ -1,4 +1,6 @@
 # gatk4-exome-analysis-pipeline
+# Flattened structs (nested json input format) to make it compatible with Terra.
+
 ### Purpose :
 This WDL pipeline implements data pre-processing and initial variant calling according to the GATK Best Practices for germline SNP and Indel discovery in human exome sequencing data.
 
