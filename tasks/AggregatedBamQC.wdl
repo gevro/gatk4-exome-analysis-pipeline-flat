@@ -27,7 +27,30 @@ input {
     String sample_name
     String recalibrated_bam_base_name
     File? haplotype_database_file
-    GermlineSingleSampleReferences references
+    
+    File? fingerprint_genotypes_file
+    File? fingerprint_genotypes_index
+    File contamination_sites_ud
+    File contamination_sites_bed
+    File contamination_sites_mu
+    File calling_interval_list
+    Int haplotype_scatter_count
+    Int break_bands_at_multiples_of
+    File ref_dict
+    File ref_fasta
+    File ref_fasta_index
+    File? ref_alt
+    File ref_sa
+    File ref_amb
+    File ref_bwt
+    File ref_ann
+    File ref_pac
+    Array[File] known_indels_sites_vcfs
+    Array[File] known_indels_sites_indices
+    File dbsnp_vcf
+    File dbsnp_vcf_index
+    File evaluation_interval_list
+    
     PapiSettings papi_settings
   }
 
@@ -37,9 +60,9 @@ input {
       input_bam = base_recalibrated_bam,
       input_bam_index = base_recalibrated_bam_index,
       output_bam_prefix = base_name + ".readgroup",
-      ref_dict = references.reference_fasta.ref_dict,
-      ref_fasta = references.reference_fasta.ref_fasta,
-      ref_fasta_index = references.reference_fasta.ref_fasta_index,
+      ref_dict = reference_fasta.ref_dict,
+      ref_fasta = reference_fasta.ref_fasta,
+      ref_fasta_index = reference_fasta.ref_fasta_index,
       preemptible_tries = papi_settings.agg_preemptible_tries
   }
 
@@ -49,21 +72,21 @@ input {
       input_bam = base_recalibrated_bam,
       input_bam_index = base_recalibrated_bam_index,
       output_bam_prefix = base_name,
-      ref_dict = references.reference_fasta.ref_dict,
-      ref_fasta = references.reference_fasta.ref_fasta,
-      ref_fasta_index = references.reference_fasta.ref_fasta_index,
+      ref_dict = reference_fasta.ref_dict,
+      ref_fasta = reference_fasta.ref_fasta,
+      ref_fasta_index = reference_fasta.ref_fasta_index,
       preemptible_tries = papi_settings.agg_preemptible_tries
   }
 
-  if (defined(haplotype_database_file) && defined(references.fingerprint_genotypes_file)) {
+  if (defined(haplotype_database_file) && defined(fingerprint_genotypes_file)) {
     # Check the sample BAM fingerprint against the sample array
     call QC.CheckFingerprint as CheckFingerprint {
       input:
         input_bam = base_recalibrated_bam,
         input_bam_index = base_recalibrated_bam_index,
         haplotype_database_file = haplotype_database_file,
-        genotypes = references.fingerprint_genotypes_file,
-        genotypes_index = references.fingerprint_genotypes_index,
+        genotypes = fingerprint_genotypes_file,
+        genotypes_index = fingerprint_genotypes_index,
         output_basename = base_name,
         sample = sample_name,
         preemptible_tries = papi_settings.agg_preemptible_tries
