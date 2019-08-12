@@ -92,10 +92,10 @@ workflow ExomeGermlineSingleSample {
   call ToBam.UnmappedBamToAlignedBam {
     input:
       base_file_name = base_file_name,
-  	  final_gvcf_base_name = final_gvcf_base_name
-  	  flowcell_unmapped_bams = flowcell_unmapped_bams,
-  	  sample_name = sample_name,
-  	  unmapped_bam_suffix = unmapped_bam_suffix,
+      final_gvcf_base_name = final_gvcf_base_name,
+      flowcell_unmapped_bams = flowcell_unmapped_bams,
+      sample_name = sample_name,
+      unmapped_bam_suffix = unmapped_bam_suffix,
 
       fingerprint_genotypes_file = fingerprint_genotypes_file,
       fingerprint_genotypes_index = fingerprint_genotypes_index,
