@@ -40,7 +40,7 @@ import "https://raw.githubusercontent.com/gevro/gatk4-exome-analysis-pipeline-fl
 # WORKFLOW DEFINITION
 workflow ExomeGermlineSingleSample {
 
-  input {
+#  input {
     PapiSettings papi_settings
     
     String base_file_name
@@ -82,7 +82,7 @@ workflow ExomeGermlineSingleSample {
 
     Boolean provide_bam_output = false
     File? haplotype_database_file
-  }
+#  }
 
   # Not overridable:
   Float lod_threshold = -10.0
