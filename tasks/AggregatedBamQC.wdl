@@ -60,9 +60,9 @@ input {
       input_bam = base_recalibrated_bam,
       input_bam_index = base_recalibrated_bam_index,
       output_bam_prefix = base_name + ".readgroup",
-      ref_dict = reference_fasta.ref_dict,
-      ref_fasta = reference_fasta.ref_fasta,
-      ref_fasta_index = reference_fasta.ref_fasta_index,
+      ref_dict = ref_dict,
+      ref_fasta = ref_fasta,
+      ref_fasta_index = ref_fasta_index,
       preemptible_tries = papi_settings.agg_preemptible_tries
   }
 
@@ -72,9 +72,9 @@ input {
       input_bam = base_recalibrated_bam,
       input_bam_index = base_recalibrated_bam_index,
       output_bam_prefix = base_name,
-      ref_dict = reference_fasta.ref_dict,
-      ref_fasta = reference_fasta.ref_fasta,
-      ref_fasta_index = reference_fasta.ref_fasta_index,
+      ref_dict = ref_dict,
+      ref_fasta = ref_fasta,
+      ref_fasta_index = ref_fasta_index,
       preemptible_tries = papi_settings.agg_preemptible_tries
   }
 
