@@ -27,10 +27,18 @@ workflow SplitLargeReadGroup {
     String bwa_version
     String output_bam_basename
 
-    # reference_fasta.ref_alt is the .alt file from bwa-kit
+    # ref_alt is the .alt file from bwa-kit
     # (https://github.com/lh3/bwa/tree/master/bwakit),
     # listing the reference contigs that are "alternative".
-    ReferenceFasta reference_fasta
+    File ref_dict
+    File ref_fasta
+    File ref_fasta_index
+    File? ref_alt
+    File ref_sa
+    File ref_amb
+    File ref_bwt
+    File ref_ann
+    File ref_pac
 
     Int compression_level
     Int preemptible_tries
@@ -54,7 +62,15 @@ workflow SplitLargeReadGroup {
         input_bam = unmapped_bam,
         bwa_commandline = bwa_commandline,
         output_bam_basename = current_name,
-        reference_fasta = reference_fasta,
+        ref_dict = ref_dict,
+        ref_fasta = ref_fasta,
+        ref_fasta_index = ref_fasta_index,
+        ref_alt = ref_alt,
+        ref_sa = ref_sa,
+        ref_amb = ref_amb,
+        ref_bwt = ref_bwt,
+        ref_ann = ref_ann,
+        ref_pac = ref_pac,
         bwa_version = bwa_version,
         compression_level = compression_level,
         preemptible_tries = preemptible_tries

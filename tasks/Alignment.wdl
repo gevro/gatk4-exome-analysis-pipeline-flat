@@ -42,18 +42,26 @@ task SamToFastqAndBwaMemAndMba {
     String bwa_version
     String output_bam_basename
 
-    # reference_fasta.ref_alt is the .alt file from bwa-kit
+    # ref_alt is the .alt file from bwa-kit
     # (https://github.com/lh3/bwa/tree/master/bwakit),
     # listing the reference contigs that are "alternative".
-    ReferenceFasta reference_fasta
+    File ref_dict
+    File ref_fasta
+    File ref_fasta_index
+    File? ref_alt
+    File ref_sa
+    File ref_amb
+    File ref_bwt
+    File ref_ann
+    File ref_pac
 
     Int compression_level
     Int preemptible_tries
   }
 
   Float unmapped_bam_size = size(input_bam, "GiB")
-  Float ref_size = size(reference_fasta.ref_fasta, "GiB") + size(reference_fasta.ref_fasta_index, "GiB") + size(reference_fasta.ref_dict, "GiB")
-  Float bwa_ref_size = ref_size + size(reference_fasta.ref_alt, "GiB") + size(reference_fasta.ref_amb, "GiB") + size(reference_fasta.ref_ann, "GiB") + size(reference_fasta.ref_bwt, "GiB") + size(reference_fasta.ref_pac, "GiB") + size(reference_fasta.ref_sa, "GiB")
+  Float ref_size = size(ref_fasta, "GiB") + size(ref_fasta_index, "GiB") + size(ref_dict, "GiB")
+  Float bwa_ref_size = ref_size + size(ref_alt, "GiB") + size(ref_amb, "GiB") + size(ref_ann, "GiB") + size(ref_bwt, "GiB") + size(ref_pac, "GiB") + size(ref_sa, "GiB")
   # Sometimes the output is larger than the input, or a task can spill to disk.
   # In these cases we need to account for the input (1) and the output (1.5) or the input(1), the output(1), and spillage (.5).
   Float disk_multiplier = 2.5
@@ -64,9 +72,9 @@ task SamToFastqAndBwaMemAndMba {
     set -e
 
     # set the bash variable needed for the command-line
-    bash_ref_fasta=~{reference_fasta.ref_fasta}
-    # if reference_fasta.ref_alt has data in it,
-    if [ -s ~{reference_fasta.ref_alt} ]; then
+    bash_ref_fasta=~{ref_fasta}
+    # if ref_alt has data in it,
+    if [ -s ~{ref_alt} ]; then
       java -Xms1000m -Xmx1000m -jar /usr/gitc/picard.jar \
         SamToFastq \
         INPUT=~{input_bam} \
@@ -84,7 +92,7 @@ task SamToFastqAndBwaMemAndMba {
         ALIGNED_BAM=/dev/stdin \
         UNMAPPED_BAM=~{input_bam} \
         OUTPUT=~{output_bam_basename}.bam \
-        REFERENCE_SEQUENCE=~{reference_fasta.ref_fasta} \
+        REFERENCE_SEQUENCE=~{ref_fasta} \
         PAIRED_RUN=true \
         SORT_ORDER="unsorted" \
         IS_BISULFITE_SEQUENCE=false \
@@ -106,7 +114,7 @@ task SamToFastqAndBwaMemAndMba {
       grep -m1 "read .* ALT contigs" ~{output_bam_basename}.bwa.stderr.log | \
       grep -v "read 0 ALT contigs"
 
-    # else reference_fasta.ref_alt is empty or could not be found
+    # else ref_alt is empty or could not be found
     else
       exit 1;
     fi
