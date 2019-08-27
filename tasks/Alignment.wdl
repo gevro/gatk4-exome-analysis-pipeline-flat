@@ -75,10 +75,19 @@ task SamToFastqAndBwaMemAndMba {
     bash_ref_fasta=~{ref_fasta}
     # if ref_alt has data in it,
     if [ -s ~{ref_alt} ]; then
+     
+      java -Xms4000m -Xmx4000m -jar /usr/gitc/picard.jar \
+      MarkIlluminaAdapters \
+			INPUT=~{input_bam} \
+			OUTPUT=~{input_bam}.markilluminaadapters.bam \
+			METRICS=~{input_bam}.markilluminaadapters_metrics
+    
       java -Xms1000m -Xmx1000m -jar /usr/gitc/picard.jar \
         SamToFastq \
-        INPUT=~{input_bam} \
+        INPUT=~{input_bam}.markilluminaadapters.bam \
         FASTQ=/dev/stdout \
+        CLIPPING_ATTRIBUTE=XT \
+        CLIPPING_ACTION=2 \
         INTERLEAVE=true \
         NON_PF=true | \
       /usr/gitc/~{bwa_commandline} /dev/stdin - 2> >(tee ~{output_bam_basename}.bwa.stderr.log >&2) | \
@@ -129,6 +138,7 @@ task SamToFastqAndBwaMemAndMba {
   output {
     File output_bam = "~{output_bam_basename}.bam"
     File bwa_stderr_log = "~{output_bam_basename}.bwa.stderr.log"
+    File markilluminaadapters_metrics = "~{input_bam}.markilluminaadapters_metrics"
   }
 }
 
