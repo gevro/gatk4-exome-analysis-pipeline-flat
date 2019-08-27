@@ -298,7 +298,7 @@ workflow UnmappedBamToAlignedBam {
     Array[File] unsorted_read_group_quality_by_cycle_metrics = CollectUnsortedReadgroupBamQualityMetrics.quality_by_cycle_metrics
     Array[File] unsorted_read_group_quality_distribution_pdf = CollectUnsortedReadgroupBamQualityMetrics.quality_distribution_pdf
     Array[File] unsorted_read_group_quality_distribution_metrics = CollectUnsortedReadgroupBamQualityMetrics.quality_distribution_metrics
-    Array[String] markilluminaadapters_metrics = CollectUnsortedReadgroupBamQualityMetrics.markilluminaadapters_metrics
+    Array[String] unsorted_read_group_markilluminaadapters_metrics = CollectUnsortedReadgroupBamQualityMetrics.markilluminaadapters_metrics
     File? cross_check_fingerprints_metrics = CrossCheckFingerprints.cross_check_fingerprints_metrics
 
     File selfSM = CheckContamination.selfSM
