@@ -222,6 +222,7 @@ workflow ExomeGermlineSingleSample {
     Array[File] unsorted_read_group_quality_by_cycle_metrics = UnmappedBamToAlignedBam.unsorted_read_group_quality_by_cycle_metrics
     Array[File] unsorted_read_group_quality_distribution_pdf = UnmappedBamToAlignedBam.unsorted_read_group_quality_distribution_pdf
     Array[File] unsorted_read_group_quality_distribution_metrics = UnmappedBamToAlignedBam.unsorted_read_group_quality_distribution_metrics
+    Array[String] unsorted_read_group_markilluminaadapters_metrics = UnmappedBamToAlignedBam.unsorted_read_group_markilluminaadapters_metrics
 
     File read_group_alignment_summary_metrics = AggregatedBamQC.read_group_alignment_summary_metrics
 
