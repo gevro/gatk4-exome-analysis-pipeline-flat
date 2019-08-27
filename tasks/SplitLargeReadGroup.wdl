@@ -95,5 +95,6 @@ workflow SplitLargeReadGroup {
   }
   output {
     File aligned_bam = GatherMonolithicBamFile.output_bam
+    Array[File] markilluminaadapters_metrics = SamToFastqAndBwaMemAndMba.markilluminaadapters_metrics
   }
 }
