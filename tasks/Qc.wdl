@@ -48,7 +48,7 @@ task CollectUnsortedReadgroupBamQualityMetrics {
   input {
     File input_bam
     String output_bam_prefix
-    String markilluminaadapters_metrics
+    String input_markilluminaadapters_metrics
     Int preemptible_tries
   }
 
@@ -86,7 +86,7 @@ task CollectUnsortedReadgroupBamQualityMetrics {
     File quality_by_cycle_metrics = "~{output_bam_prefix}.quality_by_cycle_metrics"
     File quality_distribution_pdf = "~{output_bam_prefix}.quality_distribution.pdf"
     File quality_distribution_metrics = "~{output_bam_prefix}.quality_distribution_metrics"
-    String markilluminaadapters_metrics = "~{markilluminaadapters_metrics}"
+    String markilluminaadapters_metrics = "~{input_markilluminaadapters_metrics}"
   }
 }
 
