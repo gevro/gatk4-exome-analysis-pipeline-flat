@@ -144,7 +144,7 @@ workflow UnmappedBamToAlignedBam {
     # no reference as the input here is unsorted, providing a reference would cause an error
     call QC.CollectUnsortedReadgroupBamQualityMetrics as CollectUnsortedReadgroupBamQualityMetrics {
       input:
-        markilluminaadapters_metrics = markilluminaadapters_metrics,
+        input_markilluminaadapters_metrics = markilluminaadapters_metrics,
         input_bam = output_aligned_bam,
         output_bam_prefix = unmapped_bam_basename + ".readgroup",
         preemptible_tries = papi_settings.preemptible_tries
