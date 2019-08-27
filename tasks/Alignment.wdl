@@ -77,10 +77,10 @@ task SamToFastqAndBwaMemAndMba {
     if [ -s ~{ref_alt} ]; then
       java -Xms4000m -Xmx4000m -jar /usr/gitc/picard.jar \
       MarkIlluminaAdapters \
-	INPUT=~{input_bam} \
-	OUTPUT=~{input_bam}.markilluminaadapters.bam \
-	METRICS=~{input_bam}.markilluminaadapters_metrics
-    
+      INPUT=~{input_bam} \
+      OUTPUT=~{input_bam}.markilluminaadapters.bam \
+      METRICS=~{input_bam}.markilluminaadapters_metrics
+      
       java -Xms1000m -Xmx1000m -jar /usr/gitc/picard.jar \
         SamToFastq \
         INPUT=~{input_bam}.markilluminaadapters.bam \
