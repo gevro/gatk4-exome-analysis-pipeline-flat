@@ -78,12 +78,12 @@ task SamToFastqAndBwaMemAndMba {
       java -Xms4000m -Xmx4000m -jar /usr/gitc/picard.jar \
       MarkIlluminaAdapters \
       INPUT=~{input_bam} \
-      OUTPUT=~{input_bam}.markilluminaadapters.bam \
-      METRICS=~{input_bam}.markilluminaadapters_metrics
+      OUTPUT=~{output_bam_basename}.markilluminaadapters.bam \
+      METRICS=~{output_bam_basename}.markilluminaadapters_metrics
       
       java -Xms1000m -Xmx1000m -jar /usr/gitc/picard.jar \
         SamToFastq \
-        INPUT=~{input_bam}.markilluminaadapters.bam \
+        INPUT=~{output_bam_basename}.markilluminaadapters.bam \
         FASTQ=/dev/stdout \
         CLIPPING_ATTRIBUTE=XT \
         CLIPPING_ACTION=2 \
@@ -137,7 +137,7 @@ task SamToFastqAndBwaMemAndMba {
   output {
     File output_bam = "~{output_bam_basename}.bam"
     File bwa_stderr_log = "~{output_bam_basename}.bwa.stderr.log"
-    String markilluminaadapters_metrics = "~{input_bam}.markilluminaadapters_metrics"
+    String markilluminaadapters_metrics = "~{output_bam_basename}.markilluminaadapters_metrics"
   }
 }
 
