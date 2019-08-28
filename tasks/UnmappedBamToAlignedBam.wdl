@@ -62,8 +62,7 @@ workflow UnmappedBamToAlignedBam {
     String recalibrated_bam_basename
   }
 
-  #Float cutoff_for_large_rg_in_gb = 20.0
-  Float cutoff_for_large_rg_in_gb = 0.1
+  Float cutoff_for_large_rg_in_gb = 20.0
   
   String bwa_commandline = "bwa mem -K 100000000 -p -v 3 -t 16 -Y $bash_ref_fasta"
 
