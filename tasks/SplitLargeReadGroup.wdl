@@ -61,7 +61,8 @@ workflow SplitLargeReadGroup {
       input:
         input_bam = unmapped_bam,
         bwa_commandline = bwa_commandline,
-        output_bam_basename = current_name,
+        #output_bam_basename = current_name,
+        output_bam_basename = basename(input_bam,".bam") + "." + current_name,
         ref_dict = ref_dict,
         ref_fasta = ref_fasta,
         ref_fasta_index = ref_fasta_index,
