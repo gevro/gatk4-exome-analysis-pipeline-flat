@@ -137,7 +137,6 @@ task SamToFastqAndBwaMemAndMba {
   output {
     File output_bam = "~{output_bam_basename}.bam"
     File bwa_stderr_log = "~{output_bam_basename}.bwa.stderr.log"
-    File markilluminaadapters_metrics = "~{output_bam_basename}.markilluminaadapters_metrics"
   }
 }
 
