@@ -374,7 +374,7 @@ task ValidateSamFile {
     Array[String]? ignore
     Boolean? is_outlier_data
     Int preemptible_tries
-    Int memory_multiplier = 1.8
+    Int memory_multiplier = 2
   }
 
   Float ref_size = size(ref_fasta, "GiB") + size(ref_fasta_index, "GiB") + size(ref_dict, "GiB")
