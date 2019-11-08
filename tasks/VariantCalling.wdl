@@ -69,7 +69,8 @@ workflow VariantCalling {
       # Generate GVCF by interval
       call Calling.HaplotypeCaller_GATK4_VCF as HaplotypeCallerGATK4 {
         input:
-          contamination = contamination,
+          #contamination = contamination,
+          contamination = 0,
           input_bam = input_bam,
           interval_list = scattered_interval_list,
           vcf_basename = base_file_name,
