@@ -135,21 +135,13 @@ workflow UnmappedBamToAlignedBam {
     }
 
     File output_aligned_bam = select_first([SamToFastqAndBwaMemAndMba.output_bam, SplitRG.aligned_bam])
-    
+    File illuminaadapters_metrics = select_first([SamToFastqAndBwaMemAndMba.illuminaadapters_metrics, SplitRG.illuminaadapters_metrics])
+
     Float mapped_bam_size = size(output_aligned_bam, "GiB")
 
     # QC the aligned but unsorted readgroup BAM
     # no reference as the input here is unsorted, providing a reference would cause an error
     call QC.CollectUnsortedReadgroupBamQualityMetrics as CollectUnsortedReadgroupBamQualityMetrics {
-      input:
-        input_bam = output_aligned_bam,
-        output_bam_prefix = unmapped_bam_basename + ".readgroup",
-        preemptible_tries = papi_settings.preemptible_tries
-    }
-
-    #Collect MarkIlluminaAdapters Metrics. These were previously obtained during alignment, but doing this
-    #here on the full collected BAM file gives one single output metric file instead of separately for each shard.
-    call QC.MarkIlluminaAdaptersMetrics as MarkIlluminaAdaptersMetrics {
       input:
         input_bam = output_aligned_bam,
         output_bam_prefix = unmapped_bam_basename + ".readgroup",
@@ -304,7 +296,7 @@ workflow UnmappedBamToAlignedBam {
     Array[File] unsorted_read_group_quality_by_cycle_metrics = CollectUnsortedReadgroupBamQualityMetrics.quality_by_cycle_metrics
     Array[File] unsorted_read_group_quality_distribution_pdf = CollectUnsortedReadgroupBamQualityMetrics.quality_distribution_pdf
     Array[File] unsorted_read_group_quality_distribution_metrics = CollectUnsortedReadgroupBamQualityMetrics.quality_distribution_metrics
-    Array[File] unsorted_read_group_markilluminaadapters_metrics = MarkIlluminaAdaptersMetrics.markilluminaadapters_metrics
+    Array[File] unsorted_read_group_illuminaadapters_metrics = illuminaadapters_metrics
 
     File? cross_check_fingerprints_metrics = CrossCheckFingerprints.cross_check_fingerprints_metrics
 

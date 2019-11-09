@@ -488,3 +488,30 @@ task CheckContamination {
     Float contamination = read_float(stdout())
   }
 }
+
+# Create combined Illumina Adapters metrics file from metrics files of individual shards.
+task GatherIlluminaAdaptersMetrics {
+  input {
+    Array[File] input_illuminaadapters_metrics
+    String output_bam_basename
+    Int preemptible_tries
+  }
+
+  command{
+    for file in ${sep=' ' input_illuminaadapters_metrics} ; do
+      grep '^\#' $file | grep -v 'clipped_bases' >> ~{output_bam_basename}.illuminaadapters_metrics
+      echo -e 'clipped_bases\tread_count' >> ~{output_bam_basename}.illuminaadapters_metrics
+      grep -v '^\#' $file | grep -v 'clipped_bases' | grep -v '^$' > $file.tmp
+    done
+    awk '{clipping[$1]+=$2}END{for(i in clipping){print i "\t" clipping[i]}}' `ls *.tmp` | sort -k 1,1n >> ~{output_bam_basename}.illuminaadapters_metrics
+  }
+  runtime {
+    docker: "us.gcr.io/broad-gotc-prod/python:2.7"
+    memory: "4 GiB"
+    disks: "local-disk 20 HDD"
+    preemptible: preemptible_tries
+  }
+  output {
+    File illuminaadapters_metrics = "~{output_bam_basename}.illuminaadapters_metrics"
+  }
+}
