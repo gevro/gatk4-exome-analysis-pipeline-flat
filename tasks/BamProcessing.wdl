@@ -496,15 +496,18 @@ task GatherIlluminaAdaptersMetrics {
     String output_bam_basename
     Int preemptible_tries
   }
+  command <<<
+    set -e
+    set -o pipefail
 
-  command{
-    for file in ${sep=' ' input_illuminaadapters_metrics} ; do
+    for file in ~{sep=' ' input_illuminaadapters_metrics} ; do
       grep '^\#' $file | grep -v 'clipped_bases' >> ~{output_bam_basename}.illuminaadapters_metrics
       echo -e 'clipped_bases\tread_count' >> ~{output_bam_basename}.illuminaadapters_metrics
       grep -v '^\#' $file | grep -v 'clipped_bases' | grep -v '^$' > $file.tmp
     done
     awk '{clipping[$1]+=$2}END{for(i in clipping){print i "\t" clipping[i]}}' `ls *.tmp` | sort -k 1,1n >> ~{output_bam_basename}.illuminaadapters_metrics
-  }
+  >>>
+
   runtime {
     docker: "us.gcr.io/broad-gotc-prod/python:2.7"
     memory: "4 GiB"
